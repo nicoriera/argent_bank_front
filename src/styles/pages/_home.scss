@@ -1,0 +1,80 @@
+@use "../base/variables" as *;
+
+.hero {
+  background-image: url("../../assets/img/bank-tree.jpeg");
+  background-position: 0 -50px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 300px;
+  position: relative;
+
+  @media (min-width: $tablet) {
+    height: 400px;
+    background-position: 0% 33%;
+  }
+}
+
+.hero-content {
+  position: relative;
+  top: $spacing-lg;
+  width: 200px;
+  background: $white;
+  padding: $spacing-lg;
+  text-align: left;
+  margin: 0 auto;
+
+  @media (min-width: $tablet) {
+    position: absolute;
+    top: 50px;
+    right: 50px;
+    width: 300px;
+    margin: $spacing-lg;
+  }
+
+  .subtitle {
+    font-weight: bold;
+    font-size: $font-size-base;
+    margin: 0;
+
+    @media (min-width: $tablet) {
+      font-size: $font-size-xl;
+    }
+  }
+
+  .text {
+    margin-bottom: 0;
+    font-size: 0.9rem;
+
+    @media (min-width: $tablet) {
+      font-size: $font-size-lg;
+    }
+  }
+}
+
+.features {
+  display: flex;
+  flex-direction: column;
+
+  @media (min-width: $tablet) {
+    flex-direction: row;
+  }
+}
+
+.feature-icon {
+  width: 100px;
+  border: 10px solid $primary-color;
+  border-radius: 50%;
+  padding: $spacing-md;
+}
+
+.feature-item {
+  flex: 1;
+  padding: $spacing-xl;
+}
+
+.feature-item-title {
+  color: $black;
+  font-size: $font-size-lg;
+  font-weight: bold;
+  margin-bottom: $spacing-sm;
+}

@@ -1,22 +1,24 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   return (
-    <main>
+    <>
       <div className="hero">
         <section className="hero-content">
           <h2 className="sr-only">Promoted Content</h2>
           <p className="subtitle">No fees.</p>
-          <p className="subtitle">No minimum deposit.</p>
-          <p className="subtitle">High interest rates.</p>
-          <p className="text">Open a savings account with Argent Bank today!</p>
+          <p className="text">Open account in minutes right from your phone.</p>
+          <Link className="transaction-button" to="/sign-in">
+            Start now
+          </Link>
         </section>
       </div>
       <section className="features">
         <h2 className="sr-only">Features</h2>
         <div className="feature-item">
           <img
-            src="/src/assets/img/icon-chat.png"
+            src="/img/icon-chat.png"
             alt="Chat Icon"
             className="feature-icon"
           />
@@ -28,7 +30,7 @@ const Home = () => {
         </div>
         <div className="feature-item">
           <img
-            src="/src/assets/img/icon-money.png"
+            src="/img/icon-money.png"
             alt="Money Icon"
             className="feature-icon"
           />
@@ -41,7 +43,7 @@ const Home = () => {
         </div>
         <div className="feature-item">
           <img
-            src="/src/assets/img/icon-security.png"
+            src="/img/icon-security.png"
             alt="Security Icon"
             className="feature-icon"
           />
@@ -52,7 +54,7 @@ const Home = () => {
           </p>
         </div>
       </section>
-    </main>
+    </>
   );
 };
 

@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../features/auth/authSlice";
 import { clearUserData } from "../features/user/userSlice";
 import argentBankLogo from "../assets/img/argentBankLogo.png";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -18,36 +19,29 @@ const Header = () => {
   };
 
   return (
-    <nav className="flex justify-between items-center px-5 py-3 bg-white">
-      <Link to="/" className="flex items-center">
+    <nav className="main-nav">
+      <Link className="main-nav-logo" to="/">
         <img
-          className="max-w-full w-24"
+          className="main-nav-logo-image"
           src={argentBankLogo}
           alt="Argent Bank Logo"
         />
-        <h1 className="sr-only">Argent Bank</h1>
       </Link>
       <div>
         {isAuthenticated ? (
           <>
-            <Link
-              className="font-bold text-gray-700 mr-2 hover:underline"
-              to="/profile">
-              <i className="fa fa-user-circle mr-1"></i>
+            <Link className="main-nav-item" to="/profile">
+              <i className="fa fa-user-circle"></i>
               {firstName}
             </Link>
-            <button
-              className="font-bold text-gray-700 hover:underline bg-transparent border-none cursor-pointer"
-              onClick={handleLogout}>
-              <i className="fa fa-sign-out mr-1"></i>
+            <Link className="main-nav-item" to="/" onClick={handleLogout}>
+              <i className="fa fa-sign-out"></i>
               Sign Out
-            </button>
+            </Link>
           </>
         ) : (
-          <Link
-            to="/login"
-            className="flex items-center text-gray-700 font-bold hover:underline">
-            <i className="fa fa-user-circle mr-1"></i>
+          <Link className="main-nav-item" to="/login">
+            <i className="fa fa-user-circle"></i>
             Sign In
           </Link>
         )}
