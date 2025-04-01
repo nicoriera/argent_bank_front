@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../features/auth/authSlice";
 import { clearUserData } from "../features/user/userSlice";
-import logo from "../assets/img/argentBankLogo.png";
+import argentBankLogo from "../assets/img/argentBankLogo.png";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -18,11 +18,11 @@ const Header = () => {
   };
 
   return (
-    <nav className="main-nav">
-      <Link className="main-nav-logo" to="/">
+    <nav className="flex justify-between items-center px-5 py-3 bg-white">
+      <Link to="/" className="flex items-center">
         <img
-          className="main-nav-logo-image"
-          src={logo}
+          className="max-w-full w-24"
+          src={argentBankLogo}
           alt="Argent Bank Logo"
         />
         <h1 className="sr-only">Argent Bank</h1>
@@ -30,20 +30,24 @@ const Header = () => {
       <div>
         {isAuthenticated ? (
           <>
-            <Link className="main-nav-item" to="/profile">
-              <i className="fa fa-user-circle"></i>
+            <Link
+              className="font-bold text-gray-700 mr-2 hover:underline"
+              to="/profile">
+              <i className="fa fa-user-circle mr-1"></i>
               {firstName}
             </Link>
             <button
-              className="main-nav-item logout-button"
+              className="font-bold text-gray-700 hover:underline bg-transparent border-none cursor-pointer"
               onClick={handleLogout}>
-              <i className="fa fa-sign-out"></i>
+              <i className="fa fa-sign-out mr-1"></i>
               Sign Out
             </button>
           </>
         ) : (
-          <Link className="main-nav-item" to="/login">
-            <i className="fa fa-user-circle"></i>
+          <Link
+            to="/login"
+            className="flex items-center text-gray-700 font-bold hover:underline">
+            <i className="fa fa-user-circle mr-1"></i>
             Sign In
           </Link>
         )}

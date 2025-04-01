@@ -79,9 +79,13 @@ const Profile = () => {
   }
 
   return (
-    <main className="main bg-dark">
-      <div className="header">
-        {error && <div className="error-message">{error}</div>}
+    <main className="flex-1 bg-purple-950">
+      <div className="text-white mb-8">
+        {error && (
+          <div className="text-red-600 bg-red-100 border border-red-200 p-2.5 mb-4 rounded">
+            {error}
+          </div>
+        )}
         {!isEditing ? (
           <>
             <h1>
@@ -89,43 +93,53 @@ const Profile = () => {
               <br />
               {firstName} {lastName}!
             </h1>
-            <button className="edit-button" onClick={handleEdit}>
+            <button
+              className="bg-green-500 text-white font-bold py-2 px-4 cursor-pointer"
+              onClick={handleEdit}>
               Edit Name
             </button>
           </>
         ) : (
-          <div className="edit-profile-form">
+          <div className="mx-auto w-4/5 max-w-lg">
             <h1>Edit user info</h1>
             <form onSubmit={handleSave}>
-              <div className="input-group">
-                <div className="input-wrapper">
-                  <label htmlFor="firstName">First Name</label>
+              <div className="flex flex-col md:flex-row gap-4">
+                <div className="flex flex-col text-left mb-4">
+                  <label htmlFor="firstName" className="font-bold">
+                    First Name
+                  </label>
                   <input
                     type="text"
                     id="firstName"
                     value={editedFirstName}
                     onChange={(e) => setEditedFirstName(e.target.value)}
+                    className="p-1.5 text-lg border border-gray-300 rounded text-black"
                     required
                   />
                 </div>
-                <div className="input-wrapper">
-                  <label htmlFor="lastName">Last Name</label>
+                <div className="flex flex-col text-left mb-4">
+                  <label htmlFor="lastName" className="font-bold">
+                    Last Name
+                  </label>
                   <input
                     type="text"
                     id="lastName"
                     value={editedLastName}
                     onChange={(e) => setEditedLastName(e.target.value)}
+                    className="p-1.5 text-lg border border-gray-300 rounded text-black"
                     required
                   />
                 </div>
               </div>
-              <div className="button-group">
-                <button type="submit" className="save-button">
+              <div className="flex justify-center mt-4">
+                <button
+                  type="submit"
+                  className="bg-green-500 text-white font-bold py-2 px-4 mr-2 cursor-pointer">
                   Save
                 </button>
                 <button
                   type="button"
-                  className="cancel-button"
+                  className="bg-gray-600 text-white font-bold py-2 px-4 cursor-pointer"
                   onClick={handleCancel}>
                   Cancel
                 </button>

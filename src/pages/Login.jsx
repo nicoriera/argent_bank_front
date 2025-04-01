@@ -32,42 +32,56 @@ const Login = () => {
   };
 
   return (
-    <main className="main bg-dark">
-      <section className="sign-in-content">
-        <i className="fa fa-user-circle sign-in-icon"></i>
+    <main className="flex-1 bg-purple-950">
+      <section className="box-border bg-white w-80 mx-auto mt-12 p-8">
+        <i className="fa fa-user-circle text-5xl"></i>
         <h1>Sign In</h1>
-        {error && <div className="error-message">{error}</div>}
+        {error && (
+          <div className="text-red-600 bg-red-100 border border-red-200 p-2.5 mb-4 rounded">
+            {error}
+          </div>
+        )}
         <form onSubmit={handleSubmit}>
-          <div className="input-wrapper">
-            <label htmlFor="email">Email</label>
+          <div className="flex flex-col text-left mb-4">
+            <label htmlFor="email" className="font-bold">
+              Email
+            </label>
             <input
               type="email"
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              className="p-1.5 text-lg border border-gray-300 rounded"
               required
             />
           </div>
-          <div className="input-wrapper">
-            <label htmlFor="password">Password</label>
+          <div className="flex flex-col text-left mb-4">
+            <label htmlFor="password" className="font-bold">
+              Password
+            </label>
             <input
               type="password"
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              className="p-1.5 text-lg border border-gray-300 rounded"
               required
             />
           </div>
-          <div className="input-remember">
+          <div className="flex items-center mb-2">
             <input
               type="checkbox"
               id="remember-me"
               checked={rememberMe}
               onChange={(e) => setRememberMe(e.target.checked)}
+              className="mr-1"
             />
             <label htmlFor="remember-me">Remember me</label>
           </div>
-          <button type="submit" className="sign-in-button" disabled={isLoading}>
+          <button
+            type="submit"
+            className="block w-full p-2 text-lg font-bold mt-4 bg-green-500 text-white cursor-pointer disabled:opacity-70"
+            disabled={isLoading}>
             {isLoading ? "Loading..." : "Sign In"}
           </button>
         </form>
