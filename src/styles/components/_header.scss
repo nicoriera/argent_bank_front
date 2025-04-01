@@ -1,0 +1,59 @@
+@use "../base/variables" as *;
+
+.main-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing-xs $spacing-lg;
+  flex-direction: row;
+
+  a {
+    font-weight: bold;
+    color: $text-color;
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+  }
+
+  a.router-link-exact-active {
+    color: $primary-color;
+  }
+}
+
+.main-nav-item {
+  text-decoration: none;
+  margin-right: $spacing-sm;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.main-nav-logo {
+  display: flex;
+  align-items: center;
+
+  &-image {
+    max-width: 100%;
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+  }
+}
+
+.logout-button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-weight: bold;
+  color: $text-color;
+  font-size: $font-size-base;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

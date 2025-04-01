@@ -1,8 +1,5 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@use "./styles/main.scss" as *;
 
-/* Vous pouvez garder certains styles personnalisés ici si nécessaire */
 html {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -36,6 +33,10 @@ body {
 
 .bg-dark {
   background-color: #12002b;
+}
+
+a {
+  text-decoration: none;
 }
 
 .sr-only {
@@ -182,19 +183,6 @@ body {
   font-size: 1.25rem;
   font-weight: bold;
   margin-bottom: 0.5rem;
-}
-
-.sign-in-button {
-  display: block;
-  width: 100%;
-  padding: 8px;
-  font-size: 1.1rem;
-  font-weight: bold;
-  margin-top: 1rem;
-  border-color: #00bc77;
-  background-color: #00bc77;
-  color: #fff;
-  cursor: pointer;
 }
 
 .sign-in-content {
