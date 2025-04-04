@@ -22,13 +22,27 @@ Ce projet est une application bancaire permettant aux utilisateurs de se connect
 2. Installez les dépendances avec `npm install`
 3. Lancez l'application en mode développement avec `npm run dev`
 
+## Utilisateurs de test
+
+Pour tester l'application, vous pouvez utiliser les comptes suivants :
+
+### Tony Stark
+
+- **Email**: `tony@stark.com`
+- **Password**: `password123`
+
+### Steve Rogers
+
+- **Email**: `steve@rogers.com`
+- **Password**: `password456`
+
 ## Structure du projet
 
 - `/src/components` : Composants réutilisables
 - `/src/pages` : Pages principales de l'application
 - `/src/features` : Slices Redux et logique métier
 - `/src/store` : Configuration du store Redux
-- `/src/services` : Services pour les appels API (à implémenter)
+- `/src/services` : Services pour les appels API (maintenant implémentés)
 - `/src/assets` : Images et autres ressources statiques
 
 ## Phase 2 : Transactions
