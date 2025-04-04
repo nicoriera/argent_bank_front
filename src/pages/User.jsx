@@ -1,14 +1,39 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { getUserProfile } from "../features/user/userSlice";
 
 const User = () => {
+  const { firstName, lastName } = useSelector((state) => state.user);
+
+  const fullName = `${firstName} ${lastName}`;
+
+  const token = useSelector((state) => state.auth.token);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (token) {
+      dispatch(getUserProfile());
+    } else {
+      console.error("Aucun token trouvé, impossible de récupérer le profil.");
+      // Gérer l'absence de token (redirection, etc.)
+    }
+  }, [dispatch, token]); // Dépendances : dispatch et token
+
+  const handleEditName = () => {
+    console.log("Edit Name");
+  };
+
   return (
-    <main className="main bg-dark">
+    <main className="user-page">
       <div className="header">
         <h1>
           Welcome back
           <br />
-          Tony Jarvis!
+          {fullName}!
         </h1>
+        <button className="edit-button" onClick={handleEditName}>
+          Edit Name
+        </button>
       </div>
       <section className="account">
         <div className="account-content-wrapper">

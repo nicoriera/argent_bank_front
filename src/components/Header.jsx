@@ -27,12 +27,12 @@ const Header = () => {
           alt="Argent Bank Logo"
         />
       </Link>
-      <div>
+      <div className="main-nav-items">
         {isAuthenticated ? (
           <>
-            <Link className="main-nav-item" to="/profile">
+            <Link className="main-nav-item" to="/user">
               <i className="fa fa-user-circle"></i>
-              {firstName}
+              <span className="main-nav-item-text">{firstName}</span>
             </Link>
             <Link className="main-nav-item" to="/" onClick={handleLogout}>
               <i className="fa fa-sign-out"></i>

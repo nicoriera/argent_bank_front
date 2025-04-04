@@ -21,6 +21,12 @@
   }
 }
 
+.main-nav-items {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
 .main-nav-item {
   text-decoration: none;
   margin-right: $spacing-sm;
@@ -36,7 +42,7 @@
 
   &-image {
     max-width: 100%;
-    width: 52px;
+    width: 100%;
     height: 52px;
     object-fit: contain;
   }
