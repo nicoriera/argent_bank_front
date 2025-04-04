@@ -1,0 +1,79 @@
+// Utilisation des variables définies dans _variables.scss pour la cohérence
+@import "../base/variables";
+
+.login-page {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  background-color: $dark-color;
+  min-height: calc(100vh - 140px);
+}
+
+.sign-in-content {
+  box-sizing: border-box;
+  background-color: $white;
+  width: 300px;
+  margin: 3rem auto;
+  padding: 2rem;
+
+  .sign-in-icon {
+    font-size: 1.5rem;
+  }
+
+  .error-message {
+    color: $error-color;
+    background-color: $error-bg;
+    border: 1px solid $error-border;
+    padding: 0.625rem;
+    margin-bottom: 1rem;
+    border-radius: 0.25rem;
+  }
+
+  form {
+    .input-wrapper {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+      margin-bottom: 1rem;
+
+      label {
+        font-weight: bold;
+      }
+
+      input[type="email"],
+      input[type="password"] {
+        padding: 0.375rem;
+        font-size: $font-size-lg;
+        border: 1px solid $gray;
+        border-radius: 0.15rem;
+      }
+    }
+
+    .input-remember {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+
+      label {
+        margin-left: $spacing-xs;
+      }
+    }
+
+    .sign-in-button {
+      display: block;
+      width: 100%;
+      padding: 0.5rem;
+      font-size: $font-size-lg;
+      font-weight: bold;
+      margin-top: 1rem;
+      background-color: $primary-color;
+      color: $white;
+      cursor: pointer;
+      border: none;
+
+      &:disabled {
+        opacity: 0.7;
+      }
+    }
+  }
+}
