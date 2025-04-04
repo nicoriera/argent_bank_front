@@ -1,69 +1,30 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+// Importer les fonctions API du service
+import {
+  getUserProfileApi,
+  updateUserProfileApi,
+} from "../../services/apiService";
 
-// Simulons un service d'API pour l'instant
-// Plus tard, nous créerons un véritable service d'API
-const getUserProfileAPI = async (token) => {
-  // Simulons une requête API
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      if (token) {
-        resolve({
-          status: 200,
-          message: "Profile retrieved",
-          body: {
-            firstName: "Tony",
-            lastName: "Stark",
-            email: "tony@stark.com",
-          },
-        });
-      } else {
-        resolve({
-          status: 401,
-          message: "Unauthorized",
-          body: {},
-        });
-      }
-    }, 1000);
-  });
-};
-
-const updateUserProfileAPI = async (token, userData) => {
-  // Simulons une requête API
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      if (token) {
-        resolve({
-          status: 200,
-          message: "Profile updated",
-          body: {
-            firstName: userData.firstName,
-            lastName: userData.lastName,
-            email: "tony@stark.com",
-          },
-        });
-      } else {
-        resolve({
-          status: 401,
-          message: "Unauthorized",
-          body: {},
-        });
-      }
-    }, 1000);
-  });
-};
+// Les fonctions simulées getUserProfileAPI et updateUserProfileAPI sont supprimées
+// BASE_URL n'est plus nécessaire ici
 
 export const getUserProfile = createAsyncThunk(
   "user/getProfile",
   async (_, { getState, rejectWithValue }) => {
     try {
       const { auth } = getState();
-      const response = await getUserProfileAPI(auth.token);
-      if (response.status === 200) {
-        return response.body;
-      } else {
-        return rejectWithValue(response.message);
+      const token = auth.token;
+
+      if (!token) {
+        return rejectWithValue("Aucun token trouvé");
       }
+
+      // Appeler la fonction du service API
+      const data = await getUserProfileApi(token);
+      // Le service retourne directement le corps de la réponse (le profil)
+      return data;
     } catch (error) {
+      // L'erreur gérée par handleApiResponse dans le service est relancée
       return rejectWithValue(error.message);
     }
   }
@@ -74,13 +35,22 @@ export const updateUserProfile = createAsyncThunk(
   async (userData, { getState, rejectWithValue }) => {
     try {
       const { auth } = getState();
-      const response = await updateUserProfileAPI(auth.token, userData);
-      if (response.status === 200) {
-        return response.body;
-      } else {
-        return rejectWithValue(response.message);
+      const token = auth.token;
+
+      if (!token) {
+        return rejectWithValue("Aucun token trouvé");
       }
+
+      // Appeler la fonction du service API
+      const data = await updateUserProfileApi(token, userData);
+      // Le service retourne directement le corps de la réponse (profil mis à jour)
+      // Retourner seulement firstName et lastName pour correspondre à l'ancien comportement du reducer
+      return {
+        firstName: data.firstName,
+        lastName: data.lastName,
+      };
     } catch (error) {
+      // L'erreur gérée par handleApiResponse dans le service est relancée
       return rejectWithValue(error.message);
     }
   }
@@ -89,7 +59,7 @@ export const updateUserProfile = createAsyncThunk(
 const initialState = {
   firstName: "",
   lastName: "",
-  email: "",
+  email: "", // Garder email dans l'état initial
   isLoading: false,
   error: null,
 };
@@ -102,6 +72,8 @@ const userSlice = createSlice({
       state.firstName = "";
       state.lastName = "";
       state.email = "";
+      state.isLoading = false; // Assurer la réinitialisation complète
+      state.error = null;
     },
   },
   extraReducers: (builder) => {
@@ -114,7 +86,7 @@ const userSlice = createSlice({
         state.isLoading = false;
         state.firstName = action.payload.firstName;
         state.lastName = action.payload.lastName;
-        state.email = action.payload.email;
+        state.email = action.payload.email; // Mettre à jour l'email aussi
       })
       .addCase(getUserProfile.rejected, (state, action) => {
         state.isLoading = false;
@@ -128,6 +100,7 @@ const userSlice = createSlice({
         state.isLoading = false;
         state.firstName = action.payload.firstName;
         state.lastName = action.payload.lastName;
+        // L'email n'est pas mis à jour ici car l'API ne le permet pas
       })
       .addCase(updateUserProfile.rejected, (state, action) => {
         state.isLoading = false;

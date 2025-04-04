@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { login, clearError } from "../features/auth/authSlice";
+import { loginUser, clearError } from "../features/auth/authSlice";
 
 // Importer les styles SCSS spécifiques à la page Login
 import "../styles/pages/_login.scss";
@@ -31,7 +31,7 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(login({ email, password, rememberMe }));
+    dispatch(loginUser({ email, password }));
   };
 
   return (
