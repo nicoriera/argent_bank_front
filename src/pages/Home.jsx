@@ -1,5 +1,7 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import IconChat from "../assets/img/icon-chat.png";
+import IconMoney from "../assets/img/icon-money.png";
+import IconSecurity from "../assets/img/icon-security.png";
 
 const Home = () => {
   return (
@@ -8,20 +10,16 @@ const Home = () => {
         <section className="hero-content">
           <h2 className="sr-only">Promoted Content</h2>
           <p className="subtitle">No fees.</p>
-          <p className="text">Open account in minutes right from your phone.</p>
-          <Link className="transaction-button" to="/sign-in">
-            Start now
-          </Link>
+          <p className="subtitle">No minimum deposit.</p>
+          <p className="subtitle">High interest rates.</p>
+
+          <p className="text">Open a savings account with Argent Bank today!</p>
         </section>
       </div>
       <section className="features">
         <h2 className="sr-only">Features</h2>
         <div className="feature-item">
-          <img
-            src="/img/icon-chat.png"
-            alt="Chat Icon"
-            className="feature-icon"
-          />
+          <img src={IconChat} alt="Chat Icon" className="feature-icon" />
           <h3 className="feature-item-title">You are our #1 priority</h3>
           <p>
             Need to talk to a representative? You can get in touch through our
@@ -29,11 +27,7 @@ const Home = () => {
           </p>
         </div>
         <div className="feature-item">
-          <img
-            src="/img/icon-money.png"
-            alt="Money Icon"
-            className="feature-icon"
-          />
+          <img src={IconMoney} alt="Money Icon" className="feature-icon" />
           <h3 className="feature-item-title">
             More savings means higher rates
           </h3>
@@ -43,7 +37,7 @@ const Home = () => {
         </div>
         <div className="feature-item">
           <img
-            src="/img/icon-security.png"
+            src={IconSecurity}
             alt="Security Icon"
             className="feature-icon"
           />
