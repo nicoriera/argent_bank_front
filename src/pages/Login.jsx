@@ -20,7 +20,7 @@ const Login = () => {
   useEffect(() => {
     // Si l'utilisateur est déjà authentifié, rediriger vers la page de profil
     if (isAuthenticated) {
-      navigate("/profile");
+      navigate("/user");
     }
 
     // Nettoyer les erreurs lors du démontage du composant

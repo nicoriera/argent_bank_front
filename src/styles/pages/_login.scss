@@ -1,5 +1,5 @@
 // Utilisation des variables définies dans _variables.scss pour la cohérence
-@import "../base/variables";
+@use "../base/variables" as *;
 
 .login-page {
   display: flex;
