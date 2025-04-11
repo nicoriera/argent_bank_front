@@ -1,0 +1,69 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+Always respond in French.
+Write commit messages in English.
+Generate commit messages following the Conventional Commits specification.
+
+# Code Quality & Design Principles
+When refactoring or suggesting code structure, adhere to SOLID principles.
+Ensure code follows the DRY (Don't Repeat Yourself) principle.
+Write concise, readable, and maintainable code.
+Prefer immutable data structures and update state immutably.
+Keep functions/components small and focused on a single responsibility.
+Suggest clear and descriptive naming.
+
+# JavaScript/TypeScript General
+Use arrow functions whenever possible.
+Use async/await for asynchronous operations and handle Promise rejections properly.
+
+# TypeScript Specific (if applicable)
+Enforce strong typing in TypeScript. Avoid using 'any' whenever possible.
+
+# Framework Preferences
+Prioritize using React and Tailwind CSS for React projects.
+Prioritize using Vue.js (with Composition API and <script setup>) and Tailwind CSS for Vue.js projects.
+Suggest using Pinia for state management in Vue.js.
+Suggest using Vue Router for routing in Vue.js.
+
+# Form Submission Best Practices (React & Vue.js)
+When implementing form submissions:
+- Implement client-side validation before submitting. Clearly indicate validation errors to the user, ideally near the relevant fields. Remember that server-side validation remains crucial for security.
+- Provide clear visual feedback during the submission process:
+  - Disable the submit button to prevent multiple submissions.
+  - Show a loading indicator (e.g., spinner on the button or overlay).
+- Handle potential API request errors gracefully. Display informative error messages to the user without exposing sensitive details.
+- After a successful submission, provide clear success feedback and consider resetting the form fields where appropriate.
+- Ensure forms are accessible: use semantic HTML (`<form>`, `<label>`, `<input>`, `<button type="submit">`), correctly associate labels with inputs (`htmlFor` in React, `for` in Vue/HTML), and use `<fieldset>` for grouping related controls if necessary.
+- For React:
+  - Manage form state using `useState` for simple forms. For more complex scenarios involving validation and state management, prioritize using `React Hook Form`, potentially in combination with schema validation libraries like `Yup` or `Zod`.
+  - Handle the submission logic within the `<form>` element's `onSubmit` handler. Remember to call `event.preventDefault()`.
+- For Vue.js:
+  - Use `v-model` for two-way data binding on form inputs.
+  - Handle submission logic within a method called via `@submit.prevent` on the `<form>` element.
+  - For complex validation, prioritize using `VeeValidate`, potentially in combination with `Yup` for schema definition.
+
+# Testing Principles
+Generate tests following the FIRST principles.
+
+# Error Handling
+Suggest robust error handling mechanisms (beyond just forms).
+
+# Performance
+Consider performance implications (e.g., re-renders, bundle size).
+
+# Security
+Suggest frontend security best practices (e.g., input validation/sanitization).
+
+# Accessibility
+Promote web accessibility (a11y) practices (beyond just forms).
+
+# Comments
+Keep comments minimal, explaining the 'why' not the 'what'.
+
+# AI Behavior
+Explain the reasoning behind complex suggestions.
+Ask clarifying questions if my request is ambiguous.
+When editing code, explain what changes you are making.
