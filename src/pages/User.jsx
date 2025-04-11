@@ -3,8 +3,9 @@ import { useSelector, useDispatch } from "react-redux";
 import toast from "react-hot-toast";
 import { getUserProfile, updateUserProfile } from "../features/user/userSlice";
 import AccountSection from "../components/AccountSection";
+import PropTypes from "prop-types";
 
-// Données statiques pour les comptes (à remplacer par des données dynamiques)
+// Static data for accounts (to be replaced with dynamic data eventually)
 const accountData = [
   {
     id: "checking-8349",
@@ -31,16 +32,14 @@ const User = () => {
   const token = useSelector((state) => state.auth.token);
   const dispatch = useDispatch();
 
-  // State pour gérer l'édition
+  // State
   const [isEditing, setIsEditing] = useState(false);
   const [editedFirstName, setEditedFirstName] = useState(firstName || "");
   const [editedLastName, setEditedLastName] = useState(lastName || "");
 
-  // Obtenir l'état de chargement et les erreurs potentiels pour le profil utilisateur
   const { isLoading: isProfileLoading, error: updateProfileError } =
     useSelector((state) => state.user);
 
-  // Erreur spécifique au chargement initial du profil (si besoin de les distinguer)
   const initialProfileLoadError = useSelector((state) => state.user.error);
 
   const fullName = `${firstName} ${lastName}`;
@@ -53,6 +52,8 @@ const User = () => {
     }
   }, [dispatch, token]);
 
+  // Sync local edit state with Redux state only when not editing.
+  // This prevents overwriting user input if the profile updates in the background.
   useEffect(() => {
     if (!isEditing) {
       setEditedFirstName(firstName || "");
@@ -72,16 +73,16 @@ const User = () => {
     const trimmedFirstName = editedFirstName.trim();
     const trimmedLastName = editedLastName.trim();
 
-    // Validation: non vide
+    // Validation: not empty
     if (!trimmedFirstName || !trimmedLastName) {
       toast.error("First name and last name cannot be empty.");
       return;
     }
 
-    // Validation: lettres, espaces, apostrophes, tirets uniquement
-    // Regex: ^           => début de la chaîne
-    //        [a-zA-Z\s'-]+ => une ou plusieurs lettres (maj/min), espaces, apostrophes, tirets
-    //        $           => fin de la chaîne
+    // Validation: only letters, spaces, apostrophes, hyphens allowed
+    // Regex: ^           => start of string
+    //        [a-zA-Z\s'-]+ => one or more letters (upper/lower), spaces, apostrophes, hyphens
+    //        $           => end of string
     const nameRegex = /^[a-zA-Z\s'-]+$/;
     if (!nameRegex.test(trimmedFirstName) || !nameRegex.test(trimmedLastName)) {
       toast.error(
@@ -93,6 +94,8 @@ const User = () => {
     const saveToast = toast.loading("Saving profile...");
 
     try {
+      // Use unwrap() to handle the promise returned by the async thunk.
+      // It will throw an error if the action is rejected, simplifying error handling.
       await dispatch(
         updateUserProfile({
           firstName: trimmedFirstName,
