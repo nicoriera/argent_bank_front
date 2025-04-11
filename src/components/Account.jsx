@@ -1,5 +1,5 @@
 import React from "react";
-
+import PropTypes from "prop-types";
 const Account = ({ title, amount, description }) => {
   return (
     <section className="flex flex-col md:flex-row justify-between items-center border border-black bg-white w-4/5 mx-auto p-6 mb-8 text-left">
@@ -15,6 +15,12 @@ const Account = ({ title, amount, description }) => {
       </div>
     </section>
   );
+};
+
+Account.propTypes = {
+  title: PropTypes.string.isRequired,
+  amount: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
 };
 
 export default Account;

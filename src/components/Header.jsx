@@ -5,7 +5,7 @@ import { logout } from "../features/auth/authSlice";
 import { clearUserData } from "../features/user/userSlice";
 import argentBankLogo from "../assets/img/argentBankLogo.png";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-
+import PropTypes from "prop-types";
 const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -48,6 +48,11 @@ const Header = () => {
       </div>
     </nav>
   );
+};
+
+Header.propTypes = {
+  isAuthenticated: PropTypes.bool.isRequired,
+  firstName: PropTypes.string.isRequired,
 };
 
 export default Header;

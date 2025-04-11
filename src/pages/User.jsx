@@ -1,6 +1,30 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import toast from "react-hot-toast";
 import { getUserProfile, updateUserProfile } from "../features/user/userSlice";
+import AccountSection from "../components/AccountSection";
+
+// Données statiques pour les comptes (à remplacer par des données dynamiques)
+const accountData = [
+  {
+    id: "checking-8349",
+    title: "Argent Bank Checking (x8349)",
+    amount: "$2,082.79",
+    description: "Available Balance",
+  },
+  {
+    id: "savings-6712",
+    title: "Argent Bank Savings (x6712)",
+    amount: "$10,928.42",
+    description: "Available Balance",
+  },
+  {
+    id: "credit-card-8349",
+    title: "Argent Bank Credit Card (x8349)",
+    amount: "$184.30",
+    description: "Current Balance",
+  },
+];
 
 const User = () => {
   const { firstName, lastName } = useSelector((state) => state.user);
@@ -9,8 +33,15 @@ const User = () => {
 
   // State pour gérer l'édition
   const [isEditing, setIsEditing] = useState(false);
-  const [editedFirstName, setEditedFirstName] = useState(firstName);
-  const [editedLastName, setEditedLastName] = useState(lastName);
+  const [editedFirstName, setEditedFirstName] = useState(firstName || "");
+  const [editedLastName, setEditedLastName] = useState(lastName || "");
+
+  // Obtenir l'état de chargement et les erreurs potentiels pour le profil utilisateur
+  const { isLoading: isProfileLoading, error: updateProfileError } =
+    useSelector((state) => state.user);
+
+  // Erreur spécifique au chargement initial du profil (si besoin de les distinguer)
+  const initialProfileLoadError = useSelector((state) => state.user.error);
 
   const fullName = `${firstName} ${lastName}`;
 
@@ -18,124 +49,158 @@ const User = () => {
     if (token) {
       dispatch(getUserProfile());
     } else {
-      console.error("Aucun token trouvé, impossible de récupérer le profil.");
-      // Gérer l'absence de token (redirection, etc.)
+      toast.error("Authentication token not found. Please log in.");
     }
-  }, [dispatch, token]); // Dépendances : dispatch et token
+  }, [dispatch, token]);
 
-  // Initialiser les champs d'édition lorsque le prénom/nom change (au cas où le profil est chargé après le montage initial)
   useEffect(() => {
-    setEditedFirstName(firstName);
-    setEditedLastName(lastName);
-  }, [firstName, lastName]);
+    if (!isEditing) {
+      setEditedFirstName(firstName || "");
+      setEditedLastName(lastName || "");
+    }
+  }, [firstName, lastName, isEditing]);
 
   const handleEditFullName = () => {
+    setEditedFirstName(firstName || "");
+    setEditedLastName(lastName || "");
     setIsEditing(true);
-    // Pas besoin d'initialiser ici si on le fait dans l'useEffect ci-dessus
   };
 
-  const handleSaveFullName = () => {
-    // Dispatch l'action pour mettre à jour le profil utilisateur
-    dispatch(
-      updateUserProfile({
-        firstName: editedFirstName,
-        lastName: editedLastName,
-      })
-    );
-    setIsEditing(false); // Masquer le formulaire après la sauvegarde
+  const handleSaveFullName = async (e) => {
+    e.preventDefault();
+
+    const trimmedFirstName = editedFirstName.trim();
+    const trimmedLastName = editedLastName.trim();
+
+    // Validation: non vide
+    if (!trimmedFirstName || !trimmedLastName) {
+      toast.error("First name and last name cannot be empty.");
+      return;
+    }
+
+    // Validation: lettres, espaces, apostrophes, tirets uniquement
+    // Regex: ^           => début de la chaîne
+    //        [a-zA-Z\s'-]+ => une ou plusieurs lettres (maj/min), espaces, apostrophes, tirets
+    //        $           => fin de la chaîne
+    const nameRegex = /^[a-zA-Z\s'-]+$/;
+    if (!nameRegex.test(trimmedFirstName) || !nameRegex.test(trimmedLastName)) {
+      toast.error(
+        "Name and last name can only contain letters, spaces, apostrophes, or hyphens."
+      );
+      return;
+    }
+
+    const saveToast = toast.loading("Saving profile...");
+
+    try {
+      await dispatch(
+        updateUserProfile({
+          firstName: trimmedFirstName,
+          lastName: trimmedLastName,
+        })
+      ).unwrap();
+
+      toast.success("Profile updated successfully!", { id: saveToast });
+      setIsEditing(false);
+    } catch (err) {
+      const errorMessage =
+        err?.message ||
+        updateProfileError ||
+        "Failed to update profile. Please try again.";
+      toast.error(errorMessage, { id: saveToast });
+      console.error("Failed to update profile:", err);
+    }
   };
 
   const handleCancelFullName = () => {
-    setIsEditing(false); // Masquer le formulaire
-    // Réinitialiser les champs aux valeurs originales (du store Redux)
-    setEditedFirstName(firstName);
-    setEditedLastName(lastName);
+    setIsEditing(false);
   };
 
   return (
-    <main className="user-page">
+    <main
+      className={`user-page ${
+        isProfileLoading && !firstName ? "loading" : ""
+      }`}>
       <div className="header">
-        {!isEditing ? (
+        {isProfileLoading && !firstName && <p>Loading profile...</p>}
+        {initialProfileLoadError &&
+          !firstName &&
+          toast.error(`Error loading profile: ${initialProfileLoadError}`, {
+            toastId: "load-profile-error",
+          })}
+
+        {firstName && (
           <>
-            <h1>
-              Welcome back
-              <br />
-              {fullName}!
-            </h1>
-            <button className="button edit-button" onClick={handleEditFullName}>
-              Edit Name
-            </button>
-          </>
-        ) : (
-          <>
-            <h1>Welcome back</h1> {/* Afficher le titre même en mode édition */}
-            <div className="edit-name-form">
-              <div className="edit-name-inputs">
-                <input
-                  type="text"
-                  value={editedFirstName}
-                  onChange={(e) => setEditedFirstName(e.target.value)}
-                  placeholder="First Name"
-                />
-                <input
-                  type="text"
-                  value={editedLastName}
-                  onChange={(e) => setEditedLastName(e.target.value)}
-                  placeholder="Last Name"
-                />
-              </div>
-              <div className="edit-name-buttons">
+            {!isEditing ? (
+              <>
+                <h1>
+                  Welcome back
+                  <br />
+                  {fullName}!
+                </h1>
                 <button
-                  className="button save-button"
-                  onClick={handleSaveFullName}>
-                  Save
+                  className="button edit-button"
+                  onClick={handleEditFullName}>
+                  Edit Name
                 </button>
-                <button
-                  className="button cancel-button"
-                  onClick={handleCancelFullName}>
-                  Cancel
-                </button>
-              </div>
-            </div>
+              </>
+            ) : (
+              <form onSubmit={handleSaveFullName} className="edit-name-form">
+                <h1>Welcome back</h1>
+                <div className="edit-name-inputs">
+                  <label htmlFor="editedFirstName" className="sr-only">
+                    First Name
+                  </label>
+                  <input
+                    id="editedFirstName"
+                    type="text"
+                    value={editedFirstName}
+                    onChange={(e) => setEditedFirstName(e.target.value)}
+                    placeholder="First Name"
+                    aria-label="First Name"
+                    disabled={isProfileLoading}
+                  />
+                  <label htmlFor="editedLastName" className="sr-only">
+                    Last Name
+                  </label>
+                  <input
+                    id="editedLastName"
+                    type="text"
+                    value={editedLastName}
+                    onChange={(e) => setEditedLastName(e.target.value)}
+                    placeholder="Last Name"
+                    aria-label="Last Name"
+                    disabled={isProfileLoading}
+                  />
+                </div>
+                <div className="edit-name-buttons">
+                  <button
+                    type="submit"
+                    className="button save-button"
+                    disabled={isProfileLoading}>
+                    {isProfileLoading ? "Saving..." : "Save"}
+                  </button>
+                  <button
+                    type="button"
+                    className="button cancel-button"
+                    onClick={handleCancelFullName}
+                    disabled={isProfileLoading}>
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            )}
           </>
         )}
       </div>
-      <section className="account">
-        <div className="account-content-wrapper">
-          <h3 className="account-title">Argent Bank Checking (x8349)</h3>
-          <p className="account-amount">$2,082.79</p>
-          <p className="account-amount-description">Available Balance</p>
-        </div>
-        <div className="account-content-wrapper cta">
-          <button className="button transaction-button">
-            View transactions
-          </button>
-        </div>
-      </section>
-      <section className="account">
-        <div className="account-content-wrapper">
-          <h3 className="account-title">Argent Bank Savings (x6712)</h3>
-          <p className="account-amount">$10,928.42</p>
-          <p className="account-amount-description">Available Balance</p>
-        </div>
-        <div className="account-content-wrapper cta">
-          <button className="button transaction-button">
-            View transactions
-          </button>
-        </div>
-      </section>
-      <section className="account">
-        <div className="account-content-wrapper">
-          <h3 className="account-title">Argent Bank Credit Card (x8349)</h3>
-          <p className="account-amount">$184.30</p>
-          <p className="account-amount-description">Current Balance</p>
-        </div>
-        <div className="account-content-wrapper cta">
-          <button className="button transaction-button">
-            View transactions
-          </button>
-        </div>
-      </section>
+      {accountData.map((account) => (
+        <AccountSection
+          key={account.id}
+          title={account.title}
+          amount={account.amount}
+          description={account.description}
+        />
+      ))}
     </main>
   );
 };
