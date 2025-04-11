@@ -13,7 +13,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: #fff;
+  color: $white;
   text-align: center;
   gap: 1rem;
 
@@ -26,8 +26,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border: 1px solid black;
-  background-color: #fff;
+  border: 1px solid $black;
+  background-color: $white;
   width: 80%;
   margin: 0 auto;
   flex-direction: column;
@@ -63,26 +63,24 @@
   }
 }
 
+// Utilise la classe de base .button
+// Styles spécifiques pour ce bouton si nécessaire (ex: width sur mobile)
 .transaction-button {
-  display: block;
-  width: 100%; // Or adjust as needed
-  padding: 8px;
-  font-size: 1.1rem;
-  font-weight: bold;
+  // Hérite de .button mais on écrase/ajoute ce qui est spécifique
+  display: block; // Différent de .button (inline-block)
+  width: 100%;
+  padding: 8px; // Padding spécifique
   margin-top: 1rem;
-  background-color: #00bc77;
-  border-color: #00bc77;
-  color: #fff;
-  border: none; // Assuming it looks like a link
-  cursor: pointer;
 
-  @media (min-width: 720px) {
-    width: 200px; // Adjust width for larger screens
+  @media (min-width: $mobile) {
+    // Utiliser la variable breakpoint
+    width: 200px;
   }
 }
 
 // Add media query for responsive adjustments if needed
-@media (min-width: 720px) {
+@media (min-width: $mobile) {
+  // Utiliser la variable breakpoint
   .account {
     flex-direction: row;
 
@@ -96,36 +94,55 @@
   }
 }
 
-// Styles pour le bouton d'édition et le formulaire
-.edit-button {
-  border-color: #00bc77;
-  background-color: #00bc77;
-  color: #fff;
-  font-weight: bold;
-  padding: 10px;
-  cursor: pointer;
-  margin-bottom: 2rem; // Ajouté depuis index.scss
-}
-
-.edit-profile-form {
-  margin: 0 auto;
-  width: 80%;
-  max-width: 500px;
-  color: #00bc77; // Note: la couleur a été ajoutée précédemment, vérifier si c'est correct
-}
-
-.input-group {
+// Styles pour le formulaire d'édition (remplace les anciens sélecteurs)
+.edit-name-form {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  align-items: center;
+  gap: 1rem; // Espacement entre les groupes d'inputs et de boutons
+  margin-bottom: 1rem; // Ajouter un peu d'espace sous le formulaire
+}
 
+.edit-name-inputs {
+  display: flex;
+  flex-direction: column; // Inputs l'un au-dessus de l'autre par défaut
+  align-items: center; // Centrer les inputs
+  gap: 0.5rem; // Espacement entre les inputs
+  width: 100%; // Prendre la largeur disponible
+
+  input[type="text"] {
+    padding: 0.5rem;
+    font-size: $font-size-base; // Utiliser une variable si possible
+    border: 2px solid $dark-color; // Bordure plus visible
+    border-radius: 0.15rem;
+    box-sizing: border-box; // Inclure padding et bordure dans la largeur/hauteur
+    width: 80%; // Limiter un peu la largeur des inputs
+    max-width: 200px; // Maximum pour éviter qu'ils soient trop larges
+  }
+
+  // Sur écrans plus larges, mettre les inputs côte à côte
   @media (min-width: 720px) {
     flex-direction: row;
+    justify-content: center;
+    gap: 1rem;
+
+    input[type="text"] {
+      width: auto; // Ajuster la largeur automatiquement
+    }
   }
 }
 
-.button-group {
+.edit-name-buttons {
   display: flex;
   justify-content: center;
+  gap: 1rem; // Espacement entre les boutons Save/Cancel
+  margin-top: 0.5rem; // Espace au-dessus des boutons
+}
+
+// Styles communs pour les boutons d'action qui héritent de .button
+// Plus besoin de définir les styles de base ici
+.edit-button {
+  // Styles spécifiques si besoin, ex: marges quand seul
   margin-top: 1rem;
+  margin-bottom: 1rem;
 }

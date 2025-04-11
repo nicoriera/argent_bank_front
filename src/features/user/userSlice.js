@@ -8,6 +8,26 @@ import {
 // Les fonctions simulées getUserProfileAPI et updateUserProfileAPI sont supprimées
 // BASE_URL n'est plus nécessaire ici
 
+/**
+ * Thunk asynchrone pour récupérer le profil utilisateur depuis l'API.
+ * À utiliser avec `dispatch` depuis un composant React.
+ * Gère les états `isLoading` et `error` dans le state Redux `user`.
+ *
+ * @example
+ * import { useDispatch, useSelector } from 'react-redux';
+ * import { getUserProfile } from './userSlice';
+ *
+ * const MyComponent = () => {
+ *   const dispatch = useDispatch();
+ *   const { isLoading, error } = useSelector((state) => state.user);
+ *
+ *   useEffect(() => {
+ *     dispatch(getUserProfile());
+ *   }, [dispatch]);
+ *
+ *   // ...
+ * };
+ */
 export const getUserProfile = createAsyncThunk(
   "user/getProfile",
   async (_, { getState, rejectWithValue }) => {
@@ -30,6 +50,29 @@ export const getUserProfile = createAsyncThunk(
   }
 );
 
+/**
+ * Thunk asynchrone pour mettre à jour le prénom et le nom de l'utilisateur.
+ * À utiliser avec `dispatch` depuis un composant React.
+ * Gère les états `isLoading` et `error` dans le state Redux `user`.
+ *
+ * @param {object} userData - Un objet contenant les nouvelles données utilisateur.
+ * @param {string} userData.firstName - Le nouveau prénom.
+ * @param {string} userData.lastName - Le nouveau nom de famille.
+ *
+ * @example
+ * import { useDispatch } from 'react-redux';
+ * import { updateUserProfile } from './userSlice';
+ *
+ * const SettingsForm = () => {
+ *   const dispatch = useDispatch();
+ *
+ *   const handleSubmit = (formData) => {
+ *     dispatch(updateUserProfile({ firstName: formData.firstName, lastName: formData.lastName }));
+ *   };
+ *
+ *   // ...
+ * };
+ */
 export const updateUserProfile = createAsyncThunk(
   "user/updateProfile",
   async (userData, { getState, rejectWithValue }) => {
@@ -68,6 +111,26 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+    /**
+     * Action pour réinitialiser les données utilisateur dans le state Redux.
+     * Utile par exemple lors de la déconnexion.
+     * À utiliser avec `dispatch` depuis un composant React.
+     *
+     * @example
+     * import { useDispatch } from 'react-redux';
+     * import { clearUserData } from './userSlice';
+     *
+     * const LogoutButton = () => {
+     *   const dispatch = useDispatch();
+     *
+     *   const handleLogout = () => {
+     *     // ... autres actions de déconnexion
+     *     dispatch(clearUserData());
+     *   };
+     *
+     *   // ...
+     * };
+     */
     clearUserData: (state) => {
       state.firstName = "";
       state.lastName = "";

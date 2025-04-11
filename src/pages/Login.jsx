@@ -70,7 +70,10 @@ const Login = () => {
             />
             <label htmlFor="remember-me">Remember me</label>
           </div>
-          <button type="submit" className="sign-in-button" disabled={isLoading}>
+          <button
+            type="submit"
+            className="sign-in-button button"
+            disabled={isLoading}>
             {isLoading ? "Loading..." : "Sign In"}
           </button>
         </form>

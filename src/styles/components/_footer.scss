@@ -1,0 +1,13 @@
+@use "../base/variables" as *;
+
+.footer {
+  display: flex;
+  justify-content: center;
+  border-top: 2px solid #ccc; // TODO: Utiliser une variable $gray ou $border-color ?
+  padding: $spacing-lg 0 $spacing-md; // Utiliser les variables d'espacement
+}
+
+.footer-text {
+  margin: 0;
+  padding: 0;
+}
