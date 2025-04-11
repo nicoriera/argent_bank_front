@@ -62,18 +62,7 @@
     .sign-in-button {
       display: block;
       width: 100%;
-      padding: 0.5rem;
-      font-size: $font-size-lg;
-      font-weight: bold;
       margin-top: 1rem;
-      background-color: $primary-color;
-      color: $white;
-      cursor: pointer;
-      border: none;
-
-      &:disabled {
-        opacity: 0.7;
-      }
     }
   }
 }

@@ -1,4 +1,5 @@
 @use "variables" as *;
+@use "sass:color";
 
 html {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -47,4 +48,42 @@ a {
   position: absolute !important;
   width: 1px !important;
   white-space: nowrap !important;
+}
+
+// Classes utilitaires
+.bg-dark {
+  background-color: $dark-color; // Utiliser la variable
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; // Ou une hauteur plus adaptée au contexte d'utilisation
+  font-size: $font-size-xl; // Utiliser une variable
+  color: $primary-color; // Utiliser une variable
+}
+
+// Style de base pour les boutons
+.button {
+  display: inline-block; // Permet padding/margin et centrage potentiel
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  padding: 10px 15px; // Padding par défaut
+  background-color: $primary-color; // Couleur primaire par défaut
+  color: $white;
+  border-radius: 0.25rem;
+  text-align: center;
+  text-decoration: none; // Au cas où un lien est stylisé en bouton
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: color.adjust($primary-color, $lightness: -10%);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed; // Indiquer que le bouton est désactivé
+  }
 }
