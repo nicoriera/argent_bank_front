@@ -1,5 +1,5 @@
 // URL de base pour l'API backend
-const BASE_URL = "http://localhost:3001/api/v1"; // Chemin de base de l'API
+const BASE_URL = import.meta.env.VITE_API_URL;
 
 /**
  * Gère la réponse d'un appel fetch.
