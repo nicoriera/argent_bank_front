@@ -1,0 +1,299 @@
+openapi: 3.0.0
+info:
+  title: Argent Bank Transactions API
+  description: API pour la gestion des transactions des utilisateurs d'Argent Bank.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3001/api/v1
+    description: Serveur principal
+
+paths:
+  /accounts/{accountId}/transactions:
+    get:
+      summary: Récupérer les transactions d'un compte
+      description: Retourne la liste des transactions pour un compte bancaire spécifique. Peut être filtré par mois et année.
+      tags:
+        - Transactions
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: ID du compte bancaire pour lequel récupérer les transactions.
+          schema:
+            type: string
+            example: "6b7b4b0a-1b1a-4b0a-8b0a-1b1a4b0a8b0a" # Exemple d'ID de compte
+        - name: month
+          in: query
+          required: false
+          description: Mois pour filtrer les transactions (1-12). Si non fourni, retourne les transactions pour tous les mois de l'année spécifiée (ou l'année en cours si year est aussi absent).
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 12
+        - name: year
+          in: query
+          required: false
+          description: Année pour filtrer les transactions. Si non fourni, utilise l'année en cours.
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: Succès - Détails du compte et liste des transactions récupérés.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseAccountTransactions"
+        "401":
+          description: Non autorisé - Token JWT manquant ou invalide.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+        "404":
+          description: Non trouvé - Le compte spécifié n'existe pas.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+        "500":
+          description: Erreur interne du serveur.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+
+  /transactions/{transactionId}:
+    get:
+      summary: Récupérer les détails d'une transaction
+      description: Retourne les détails complets d'une transaction spécifique via son ID.
+      tags:
+        - Transactions
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: transactionId
+          in: path
+          required: true
+          description: ID de la transaction à récupérer.
+          schema:
+            type: string
+            example: "a1b2c3d4-e5f6-7890-1234-567890abcdef" # Exemple d'ID de transaction
+      responses:
+        "200":
+          description: Succès - Détails de la transaction récupérés.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseTransaction"
+        "401":
+          description: Non autorisé - Token JWT manquant ou invalide.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+        "404":
+          description: Non trouvé - La transaction spécifiée n'existe pas.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+        "500":
+          description: Erreur interne du serveur.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+
+    put:
+      summary: Mettre à jour une transaction
+      description: Permet de modifier les informations éditables d'une transaction (catégorie, notes).
+      tags:
+        - Transactions
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: transactionId
+          in: path
+          required: true
+          description: ID de la transaction à mettre à jour.
+          schema:
+            type: string
+            example: "a1b2c3d4-e5f6-7890-1234-567890abcdef" # Exemple d'ID de transaction
+      requestBody:
+        description: Champs de la transaction à mettre à jour.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TransactionUpdate"
+      responses:
+        "200":
+          description: Succès - Transaction mise à jour.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseTransaction"
+        "400":
+          description: Mauvaise requête - Données d'entrée invalides (ex catégorie inconnue).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+        "401":
+          description: Non autorisé - Token JWT manquant ou invalide.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+        "404":
+          description: Non trouvé - La transaction spécifiée n'existe pas.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+        "500":
+          description: Erreur interne du serveur.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    TransactionData:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identifiant unique de la transaction.
+          example: "a1b2c3d4-e5f6-7890-1234-567890abcdef"
+        accountId:
+          type: string
+          description: Identifiant du compte associé à la transaction.
+          example: "6b7b4b0a-1b1a-4b0a-8b0a-1b1a4b0a8b0a"
+        date:
+          type: string
+          format: date
+          description: Date de la transaction.
+          example: "2020-06-20"
+        description:
+          type: string
+          description: Description de la transaction.
+          example: "Golden Sun Bakery"
+        amount:
+          type: number
+          format: float
+          description: Montant de la transaction.
+          example: 50.00
+        balance:
+          type: number
+          format: float
+          description: Solde du compte après la transaction.
+          example: 2187.79
+        type:
+          type: string
+          description: Type de transaction.
+          example: "Electronic"
+        category:
+          type: string
+          description: Catégorie assignée à la transaction.
+          example: "Food"
+        notes:
+          type: string
+          description: Notes ajoutées par l'utilisateur pour la transaction.
+          example: "Achat de pain et viennoiseries"
+      required:
+        - id
+        - accountId
+        - date
+        - description
+        - amount
+        - balance
+        - type
+
+    AccountTransactionsResponseData:
+      type: object
+      properties:
+        accountId:
+          type: string
+          description: ID du compte bancaire.
+          example: "6b7b4b0a-1b1a-4b0a-8b0a-1b1a4b0a8b0a"
+        accountName:
+          type: string
+          description: Nom du compte bancaire.
+          example: "Argent Bank Checking (x8349)"
+        currentBalance:
+          type: number
+          format: float
+          description: Solde actuel disponible sur le compte.
+          example: 2082.79
+        transactions:
+          type: array
+          description: Liste des transactions pour la période demandée.
+          items:
+            $ref: "#/components/schemas/TransactionData"
+      required:
+        - accountId
+        - accountName
+        - currentBalance
+        - transactions
+
+    TransactionUpdate:
+      type: object
+      properties:
+        category:
+          type: string
+          description: Nouvelle catégorie pour la transaction.
+          example: "Groceries"
+        notes:
+          type: string
+          description: Nouvelles notes pour la transaction.
+          example: "Achat hebdomadaire"
+      # Aucun champ n'est requis, on peut mettre à jour l'un ou l'autre ou les deux.
+
+    ApiResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          description: Code de statut HTTP de la réponse.
+        message:
+          type: string
+          description: Message descriptif de la réponse.
+        body:
+          type: object
+          nullable: true
+          description: Contient les données réelles de la réponse ou des détails d'erreur. Peut être de différents types selon l'endpoint.
+      required:
+        - status
+        - message
+
+    ApiResponseAccountTransactions:
+      allOf:
+        - $ref: "#/components/schemas/ApiResponse"
+        - type: object
+          properties:
+            body:
+              $ref: "#/components/schemas/AccountTransactionsResponseData"
+          required:
+            - body
+
+    ApiResponseTransaction:
+      allOf:
+        - $ref: "#/components/schemas/ApiResponse"
+        - type: object
+          properties:
+            body:
+              $ref: "#/components/schemas/TransactionData"
+          required:
+            - body
